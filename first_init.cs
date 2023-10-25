@@ -10,6 +10,8 @@ public class first_init : MonoBehaviour
     bool is_initial_user = false;
 
     List<string> m_DropOptions_languages = new List<string> { "English", "हिंदी", "mandarine chinese", "Spanish" , "Arabic" , "English", "French", "Portugese", "Russian", "Japanese", "German", "chinese", "mandarine chinese", "italian" , "Turkish" };
+    List<string> english_tans = new List<string> { "English", "Hindi", "mandarine chinese", "Spanish", "Arabic", "English", "French", "Portugese", "Russian", "Japanese", "German", "chinese", "mandarine chinese", "italian", "Turkish" };
+
     public TMP_Dropdown tmp_dropdown;
 
     public GameObject language_object;
@@ -34,6 +36,7 @@ public class first_init : MonoBehaviour
         if (PlayerPrefs.GetInt(initial_start_prefs) != -1 && !is_initial_user)
         {
             PlayerPrefs.SetInt(initial_start_prefs, -1);
+            PlayerPrefs.SetString(language_prefs, m_DropOptions_languages[0]);
 
             tmp_dropdown.onValueChanged.AddListener(delegate {
                 set_language();
@@ -106,7 +109,7 @@ public class first_init : MonoBehaviour
 
 
     void set_language(){;
-        PlayerPrefs.SetString(language_prefs, m_DropOptions_languages[tmp_dropdown.value]);
+        PlayerPrefs.SetString(language_prefs, english_tans[tmp_dropdown.value]);
     }
 
     public void next_button()
