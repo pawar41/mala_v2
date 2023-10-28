@@ -7,6 +7,6 @@
 - dropdown text size
 
 ## workflow 
--1 get app working
--2 make elements prettier
--3 add a theme
+- 1 get app working
+- 2 make elements prettier
+- 3 add a theme
