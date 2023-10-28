@@ -10,7 +10,7 @@ public class mani_move : MonoBehaviour
     public TextMeshProUGUI mala_count;
 
     public GameObject[] selectorArr;
-
+    public GameObject languageTab;
 
     bool move_mani = false;
     float start_time;
@@ -23,6 +23,8 @@ public class mani_move : MonoBehaviour
     float[] floatArray = new float[9];
     Vector3 tmp_position_of_mani;
 
+    public GameObject touch_manager;
+
     void Start()
     {
         // 403.76
@@ -31,12 +33,13 @@ public class mani_move : MonoBehaviour
 
         reset_position();
         tmp_position_of_mani = transform.position;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && touch_manager.active)
         {
             Touch t = Input.GetTouch(0);
 
@@ -54,8 +57,7 @@ public class mani_move : MonoBehaviour
                 tmp_position_of_mani.y = Mathf.Lerp(floatArray[i], floatArray[i] - drop_number, (Time.fixedTime - start_time)/duration_time);
                 selectorArr[i].transform.position = tmp_position_of_mani;
 
-                //Debug.Log(object_position + " | " + (object_position - drop_number) + " >> " + selectorArr[i].name);
-
+                
                 if (selectorArr[0].transform.position.y <= floatArray[i] - drop_number)
                 {
                     move_mani = false;
@@ -66,10 +68,6 @@ public class mani_move : MonoBehaviour
                     update_object_numbering();
                 }
             }
-
-
-
-
         }
 
     }
@@ -79,13 +77,13 @@ public class mani_move : MonoBehaviour
         int current_mani_count = Convert.ToInt32(mani_count.text);
         int current_mala_count = Convert.ToInt32(mala_count.text);
 
-        if (current_mani_count < 108)
+        if (current_mani_count < 107)
         {
             current_mani_count++;
             mani_count.SetText(current_mani_count.ToString());
         } else
         {
-            mani_count.SetText("1");
+            mani_count.SetText("0");
 
             current_mala_count++;
             mala_count.SetText(current_mala_count.ToString());
@@ -118,19 +116,26 @@ public class mani_move : MonoBehaviour
 
     GameObject tmp_gmo;
 
+
     void update_object_numbering()
     {
-        for (int i = 0; i < selectorArr.Length; i++)
+        tmp_gmo = null;
+
+        for (int i = selectorArr.Length -1; i >= 0; i--)
         {
-            if (i != selectorArr.Length -1)
+            if (i == selectorArr.Length -1)
             {
-                tmp_gmo = selectorArr[i + 1];
-                selectorArr[i + 1] = selectorArr[i];
+                tmp_gmo = selectorArr[i];
+
             } else
             {
-                selectorArr[0] = tmp_gmo;
+                selectorArr[i+1] = selectorArr[i];
             }
-            //floatArray[i] = selectorArr[i].transform.position.y;
+
+            if (i == 0)
+            {
+                selectorArr[i] = tmp_gmo;
+            }
         }
     }
 }
