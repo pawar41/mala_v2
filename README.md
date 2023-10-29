@@ -10,3 +10,7 @@
 - 1 get app working
 - 2 make elements prettier
 - 3 add a theme
+
+## more options
+- settings >> sounds
+- mala colunt api_calendar
