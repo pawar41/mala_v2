@@ -16,7 +16,7 @@ public class first_init : MonoBehaviour
 
     public GameObject language_object;
 
-    public GameObject touch_manager;
+    //public GameObject touch_manager;
 
     // move to side
    
@@ -47,7 +47,7 @@ public class first_init : MonoBehaviour
 
             is_initial_user = true;
             language_object.SetActive(true);
-            touch_manager.SetActive(false); ;
+            //touch_manager.SetActive(false); ;
         }
         
         
@@ -138,7 +138,7 @@ public class first_init : MonoBehaviour
             slide_left = false;
             language_object.SetActive(false);
 
-            touch_manager.SetActive(true);
+            //touch_manager.SetActive(true);
         }
     }
 }

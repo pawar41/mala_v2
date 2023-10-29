@@ -15,7 +15,7 @@ public class mani_move : MonoBehaviour
     bool move_mani = false;
     float start_time;
     float duration_time = .1f;
-
+    
     float drop_number = 275f;
     Vector3 start_position;
 
@@ -39,16 +39,17 @@ public class mani_move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0 && touch_manager.active)
+        /*
+         * if (Input.touchCount > 0 && touch_manager.active)
         {
             Touch t = Input.GetTouch(0);
 
             if (t.phase == TouchPhase.Ended)
             {
-                Update_mala();
-                start_time = Time.fixedTime;
+                
             }
         }
+        */
 
         if (move_mani)
         {
@@ -70,6 +71,12 @@ public class mani_move : MonoBehaviour
             }
         }
 
+    }
+
+    public void increment_mala_button()
+    {
+        Update_mala();
+        start_time = Time.fixedTime;
     }
 
     void Update_mala()

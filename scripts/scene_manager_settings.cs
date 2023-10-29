@@ -19,8 +19,7 @@ public class scene_manager_settings : MonoBehaviour
     {
         update_settings_tag_a();
         disable_settings_a();
-        //enable_settings_a();
-        //log_names();
+        
     }
 
     void Update()
@@ -77,5 +76,11 @@ public class scene_manager_settings : MonoBehaviour
         int tmp_mani_count;
         mala_prev_count = Convert.ToInt32(mala_count.text);
         mani_prev_count = Convert.ToInt32(mani_count.text);
+    }
+
+    public void reset_count()
+    {
+        mala_count.SetText("0");
+        mani_count.SetText("0");
     }
 }
