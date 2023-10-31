@@ -23,34 +23,30 @@ public class mani_move : MonoBehaviour
     float[] floatArray = new float[9];
     Vector3 tmp_position_of_mani;
 
-    public GameObject touch_manager;
+
+    private static readonly string mala_prefs = "mala_prefs";
+    private static readonly string mani_prefs = "mani_prefs";
 
     void Start()
     {
-        // 403.76
-        mani_count.SetText("0");
-        mala_count.SetText("0");
+
+        if (PlayerPrefs.GetInt(mala_prefs) == 0 && PlayerPrefs.GetInt(mani_prefs) == 0)
+        {
+            mani_count.SetText("0");
+            mala_count.SetText("0");
+            //PlayerPrefs.SetInt(initial_start_prefs, -1);
+        } else
+        {
+            mani_count.SetText(PlayerPrefs.GetInt(mani_prefs).ToString());
+            mala_count.SetText(PlayerPrefs.GetInt(mala_prefs).ToString());
+        }
 
         reset_position();
         tmp_position_of_mani = transform.position;
-        
     }
 
-    // Update is called once per frame
     void Update()
     {
-        /*
-         * if (Input.touchCount > 0 && touch_manager.active)
-        {
-            Touch t = Input.GetTouch(0);
-
-            if (t.phase == TouchPhase.Ended)
-            {
-                
-            }
-        }
-        */
-
         if (move_mani)
         {
             for (int i = selectorArr.Length -1; i >= 0; i--)
@@ -71,6 +67,12 @@ public class mani_move : MonoBehaviour
             }
         }
 
+    }
+
+    public void save_mala_mani_count()
+    {
+        PlayerPrefs.SetInt(mani_prefs, Convert.ToInt32(mani_count.text));
+        PlayerPrefs.SetInt(mala_prefs, Convert.ToInt32(mala_count.text));
     }
 
     public void increment_mala_button()

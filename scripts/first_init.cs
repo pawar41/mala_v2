@@ -7,6 +7,9 @@ public class first_init : MonoBehaviour
     private static readonly string initial_start_prefs = "initial_start_prefs";
     private static readonly string language_prefs = "language_prefs";
 
+ 
+
+
     bool is_initial_user = false;
 
     List<string> m_DropOptions_languages = new List<string> { "English", "हिंदी", "mandarine chinese", "Spanish" , "Arabic" , "English", "French", "Portugese", "Russian", "Japanese", "German", "chinese", "mandarine chinese", "italian" , "Turkish" };

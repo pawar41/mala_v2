@@ -14,12 +14,13 @@ public class scene_manager_settings : MonoBehaviour
     public TextMeshProUGUI mani_count;
     public TextMeshProUGUI mala_count;
 
+    public GameObject settings, menues;
 
     void Start()
     {
-        update_settings_tag_a();
-        disable_settings_a();
-        
+        settings.SetActive(false);
+        menues.SetActive(false);
+
     }
 
     void Update()
@@ -49,14 +50,6 @@ public class scene_manager_settings : MonoBehaviour
         }
     }
 
-    void log_names()
-    {
-        foreach (GameObject G_Obj in settings_set_scene)
-        {
-            Debug.Log(G_Obj.name);
-        }
-    }
-
     public void recover_count()
     {
         mani_count.SetText(mani_prev_count.ToString());
@@ -82,5 +75,11 @@ public class scene_manager_settings : MonoBehaviour
     {
         mala_count.SetText("0");
         mani_count.SetText("0");
+    }
+
+    public void imcrement_mala_only()
+    {
+        int tmp_mala_count = Convert.ToInt32(mala_count.text);
+        mala_count.SetText((tmp_mala_count +1).ToString());
     }
 }
