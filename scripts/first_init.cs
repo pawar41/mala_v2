@@ -6,8 +6,9 @@ public class first_init : MonoBehaviour
 {
     private static readonly string initial_start_prefs = "initial_start_prefs";
     private static readonly string language_prefs = "language_prefs";
+    private static readonly string texture_seleted = "texture_seleted";
 
- 
+
 
 
     bool is_initial_user = false;
@@ -50,57 +51,47 @@ public class first_init : MonoBehaviour
 
             is_initial_user = true;
             language_object.SetActive(true);
-            //touch_manager.SetActive(false); ;
-        }
-        
-        
 
-
-
-
-
-        /* delete on release
-         * 
-         */
-
-        if (clear_prefs)
-        {
-            PlayerPrefs.DeleteAll();
+            PlayerPrefs.SetInt(texture_seleted,0);
         }
 
-        /* delete on release
-         * 
-         */
-    }
 
-    void Update()
-    {
-        // setlanguage
         if (is_initial_user)
         {
             select_language();
             is_initial_user = false;
         }
 
-        if (slide_left)
-        {
-            if (onlyonce)
-            {
-                pos_to_reach = language_object.transform.position.x;
-                start_move_measured = Time.fixedTime;
 
-                onlyonce = false;
-            }
-            slide_gameonject();
+        if(PlayerPrefs.GetString(language_prefs) == "" || PlayerPrefs.GetString(language_prefs) == " " || PlayerPrefs.GetString(language_prefs) == null)
+        {
+            PlayerPrefs.SetString(language_prefs, m_DropOptions_languages[0]);
         }
 
 
+
+/* delete on release
+* 
+*/
+
+            if (clear_prefs)
+        {
+            PlayerPrefs.DeleteAll();
+        }
+
+/* delete on release
+* 
+*/
+    }
+
+    void Update()
+    {
 
     }
 
 
     
-    void select_language()
+    public void select_language()
     {
         if(tmp_dropdown == null)
         {
@@ -114,17 +105,20 @@ public class first_init : MonoBehaviour
 
 
 
-    void set_language(){;
+    public void set_language(){;
         PlayerPrefs.SetString(language_prefs, english_tans[tmp_dropdown.value]);
     }
 
     public void next_button()
     {
-        //Vector3 tmp_store = language_object.transform.position;
-        //tmp_store.x -= 300;
-        //language_object.transform.position = tmp_store;
+        PlayerPrefs.SetString(language_prefs, selected_lang_tmp);
+    }
 
-        slide_left = true;
+    string selected_lang_tmp = "";
+
+    public void SetLangTmp(int lang_to_select)
+    {
+        selected_lang_tmp = m_DropOptions_languages[lang_to_select];
     }
 
 

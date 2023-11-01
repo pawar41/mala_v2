@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using System;
 
+
+
 public class mani_move : MonoBehaviour
 {
     public TextMeshProUGUI mani_count;
@@ -16,19 +18,29 @@ public class mani_move : MonoBehaviour
     float start_time;
     float duration_time = .1f;
     
-    float drop_number = 275f;
+    float drop_number = 15f;
     Vector3 start_position;
 
     Vector3 tmp_position;
-    float[] floatArray = new float[9];
+    float[] floatArray; 
     Vector3 tmp_position_of_mani;
 
+    public Material current_material;
 
     private static readonly string mala_prefs = "mala_prefs";
     private static readonly string mani_prefs = "mani_prefs";
 
+    private static readonly string texture_seleted = "texture_seleted";
+
+
+    public Texture[] all_images;
+
+
+    public Material test_mani_material;
+
     void Start()
     {
+        floatArray = new float[selectorArr.Length];
 
         if (PlayerPrefs.GetInt(mala_prefs) == 0 && PlayerPrefs.GetInt(mani_prefs) == 0)
         {
@@ -43,6 +55,17 @@ public class mani_move : MonoBehaviour
 
         reset_position();
         tmp_position_of_mani = transform.position;
+
+        //gameObject.
+        //ahi.mainTexture = tex;
+
+        current_material.mainTexture = all_images[PlayerPrefs.GetInt(texture_seleted)];
+        
+    }
+
+    void test_viewer_update()
+    {
+        test_viewer = PlayerPrefs.GetInt(texture_seleted);
     }
 
     void Update()
@@ -110,7 +133,7 @@ public class mani_move : MonoBehaviour
 
         for (int i = 0 ; i < selectorArr.Length; i++)
         {
-            tmp_position_of.y -=  275f;
+            tmp_position_of.y -=  drop_number;
             selectorArr[i].transform.position = tmp_position_of;
         }
     }
@@ -147,4 +170,46 @@ public class mani_move : MonoBehaviour
             }
         }
     }
+
+    public void test_setup_mani()
+    {
+        test_mani_material.mainTexture = all_images[PlayerPrefs.GetInt(texture_seleted)];
+    }
+
+    int test_viewer = 0;
+
+    public void increment_test_mani()
+    {
+        if(test_viewer < all_images.Length -1)
+        {
+            test_viewer++;
+        }
+        else
+        {
+            test_viewer = 0;
+        }
+        test_mani_material.mainTexture = all_images[test_viewer];
+    }
+
+    public void decrement_test_mani()
+    {
+        if (test_viewer > 0)
+        {
+            test_viewer--;
+        }
+        else
+        {
+            test_viewer = all_images.Length -1;
+        }
+
+        test_mani_material.mainTexture = all_images[test_viewer];
+    }
+
+    public void save_test_mani()
+    {
+        PlayerPrefs.SetInt(texture_seleted,test_viewer);
+        current_material.mainTexture = all_images[test_viewer];
+    }
+
+    
 }

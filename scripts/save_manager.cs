@@ -16,6 +16,14 @@ public class save_manager : MonoBehaviour
 
 
     public bool empty_file = false;
+    public TextMeshProUGUI warning_text, warning_caption;
+
+    public TextMeshProUGUI month_text, year_text;
+    public GameObject Image_to_get, bar_to_get;
+    RectTransform rt;
+
+
+    public TextMeshProUGUI month_days_count, mala_counts;
 
     void Start()
     {
@@ -27,6 +35,8 @@ public class save_manager : MonoBehaviour
             reset_file();
         }
 
+        rt = Image_to_get.GetComponent<RectTransform>();
+
         //save_calendar_count();
 
         // write_file("Test");
@@ -35,10 +45,7 @@ public class save_manager : MonoBehaviour
         // convert from string to Datetime
         //var parsedDate = DateTime.Parse(DateTime.Now.ToString());
 
-        /// "id,date_time,mala,mani;"
-        //Debug.Log("1000000000," + DateTime.Now.ToString() + "," + "10000000000" + "," + "222" + ";");
-        //string min_str = "1" + DateTime.Now.ToString() + "," + "1" + "," + "2" + ";";
-        //Debug.Log(min_str.Length);
+
     }
 
     public void save_calendar_count()
@@ -72,7 +79,7 @@ public class save_manager : MonoBehaviour
         }
         else
         {
-            string[] ret_id = data_entries_tmps[data_entries_tmps.Length - 1].Split(",");
+            string[] ret_id = data_entries_tmps[data_entries_tmps.Length - 2].Split(",");
             return (int.Parse(ret_id[0]) + 1);
         }
     }
@@ -122,9 +129,120 @@ public class save_manager : MonoBehaviour
         write_file("");
     }
 
-    void print_file()
+    public void resettted_count_warning()
     {
-
+        warning_text.SetText("All count resseted to 0");
+        warning_caption.SetText("Mala count = 0 & mani count = 0");
     }
 
+    public void entry_saved_warning()
+    {
+        warning_text.SetText("Entry saved !");
+        warning_caption.SetText("You can view your entries in Calendar.");
+    }
+
+    public void count_saved_warning()
+    {
+        warning_text.SetText("count saved!");
+        warning_caption.SetText("On app start, mala & mani count will be wqual to saved.");
+    }
+
+    GameObject[] bar_objects = new GameObject[60];
+
+    public void plot_graph()
+    {
+        empty_graph();
+
+        string graph_date = "01 " + month_text.text + " " + year_text.text;
+        DateTime dt_graph_date = DateTime.Parse(graph_date);
+
+        int days_in_month = DateTime.DaysInMonth(dt_graph_date.Year, dt_graph_date.Month);
+        int max_count_in_month = extract_data_malas_max();
+
+        float width_parent = rt.rect.width;
+        float height_parent = rt.rect.height;
+
+        float bar_width = width_parent / days_in_month;
+        float bar_height = height_parent / max_count_in_month;
+        for (int i = 0;i < days_in_month; i++)
+        {
+            bar_objects[i] = Instantiate(bar_to_get, bar_to_get.transform.parent);
+            RectTransform tmp_rect_trans = bar_objects[i].GetComponent<RectTransform>();
+
+            DateTime tofind = DateTime.Parse((i+1).ToString()+ "-" + dt_graph_date.ToShortDateString().Split("-")[1]+ "-" + dt_graph_date.ToShortDateString().Split("-")[2]);
+            
+            float bar_height_child = find_height_block(tofind);
+            //Debug.Log(bar_height_child + " >> " + tofind);
+            bar_height_child *= bar_height;
+            tmp_rect_trans.sizeDelta = new Vector2(bar_width, bar_height_child);
+
+            // position
+            tmp_rect_trans.anchoredPosition = new Vector2(bar_width/2 + (bar_width * i), bar_height_child/2);
+        }
+
+        month_days_count.SetText(days_in_month.ToString());
+        mala_counts.SetText(max_count_in_month.ToString());
+    }
+
+    int find_height_block(DateTime date_needed)
+    {
+        string[] out_tmp = read_file().Split(";");
+        Array.Resize(ref out_tmp, out_tmp.Length - 1);
+
+        int max_count = 0;
+
+        for (int i = 0; i < out_tmp.Length; i++)
+        {
+            DateTime tmp_date = DateTime.Parse(out_tmp[i].Split(",")[1]);
+
+            if(tmp_date.Date == date_needed.Date)
+            {
+                max_count += int.Parse(out_tmp[i].Split(",")[2]) + int.Parse(out_tmp[i].Split(",")[3]);
+            }
+        }
+
+        return max_count;
+    }
+
+    void empty_graph()
+    {
+        for(int i = 0; i < bar_objects.Length; i++)
+        {
+            Destroy(bar_objects[i]);
+        }
+    }
+
+    int extract_data_malas_max()
+    {
+        string[] out_tmp = read_file().Split(";");
+        Array.Resize(ref out_tmp, out_tmp.Length -1);
+        int large_array_num = 0;
+
+        int[] all_entries = new int[out_tmp.Length];
+
+        for(int i = 0; i < out_tmp.Length; i++)
+        {
+            DateTime entry_date = DateTime.Parse(out_tmp[i].Split(",")[1]);
+
+            for(int j = 0; j < out_tmp.Length; j++)
+            {
+                DateTime tmp_entry_date = DateTime.Parse(out_tmp[j].Split(",")[1]) ;
+                if (tmp_entry_date.Date == entry_date.Date)
+                {
+                    all_entries[i] += int.Parse(out_tmp[j].Split(",")[2]) + int.Parse(out_tmp[j].Split(",")[3]);
+                }
+            }
+        }
+
+        for(int k = 0; k < out_tmp.Length; k++)
+        {
+            if(all_entries[k] > large_array_num)
+            {
+                large_array_num = all_entries[k];
+            }
+            
+        }
+
+        return large_array_num;
+    }
 }
