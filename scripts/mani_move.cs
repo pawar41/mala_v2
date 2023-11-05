@@ -8,17 +8,18 @@ using System;
 
 public class mani_move : MonoBehaviour
 {
+    //public AudioSource[] sounds_click;
+    
     public TextMeshProUGUI mani_count;
     public TextMeshProUGUI mala_count;
 
     public GameObject[] selectorArr;
-    public GameObject languageTab;
 
     bool move_mani = false;
     float start_time;
     float duration_time = .1f;
     
-    float drop_number = 15f;
+    float drop_number = 20f;
     Vector3 start_position;
 
     Vector3 tmp_position;
@@ -32,14 +33,35 @@ public class mani_move : MonoBehaviour
 
     private static readonly string texture_seleted = "texture_seleted";
 
+    private static readonly string sound_selected = "sound_selected";
+
 
     public Texture[] all_images;
 
 
     public Material test_mani_material;
+    int sound_nos;
+
+    public AudioSource sounds_work;
+    public AudioSource test_source;
+
+
+    public AudioClip[] clips_to_use;
+    public TextMeshProUGUI audio_name;
+    public TextMeshProUGUI mani_name;
+
 
     void Start()
     {
+        
+
+        sound_nos = PlayerPrefs.GetInt(sound_selected);
+
+        sounds_work.clip = clips_to_use[sound_nos];
+        test_source.clip = clips_to_use[sound_nos];
+
+        audio_name.SetText(clips_to_use[sound_nos].name);
+
         floatArray = new float[selectorArr.Length];
 
         if (PlayerPrefs.GetInt(mala_prefs) == 0 && PlayerPrefs.GetInt(mani_prefs) == 0)
@@ -62,6 +84,54 @@ public class mani_move : MonoBehaviour
         current_material.mainTexture = all_images[PlayerPrefs.GetInt(texture_seleted)];
         
     }
+
+    public void save_sound()
+    {
+        PlayerPrefs.SetInt(sound_selected,sound_nos);
+        sounds_work.clip = clips_to_use[sound_nos];
+    }
+
+    public void inc_sound()
+    {
+        if(sound_nos < clips_to_use.Length -1)
+        {
+            sound_nos++;
+        } else
+        {
+            sound_nos = 0;
+        }
+
+
+        test_source.clip = clips_to_use[sound_nos];
+        audio_name.SetText(clips_to_use[sound_nos].name);
+
+        test_source.Play();
+    }
+
+    public void dec_sound()
+    {
+        if (sound_nos > 0)
+        {
+            sound_nos--;
+        }
+        else
+        {
+            sound_nos = clips_to_use.Length - 1;
+        }
+
+
+        test_source.clip = clips_to_use[sound_nos];
+        audio_name.SetText(clips_to_use[sound_nos].name);
+
+        test_source.Play();
+    }
+
+    public void play_sound()
+    {
+        test_source.Play();
+    }
+
+    
 
     void test_viewer_update()
     {
@@ -102,6 +172,7 @@ public class mani_move : MonoBehaviour
     {
         Update_mala();
         start_time = Time.fixedTime;
+        // play sound
     }
 
     void Update_mala()
@@ -174,6 +245,7 @@ public class mani_move : MonoBehaviour
     public void test_setup_mani()
     {
         test_mani_material.mainTexture = all_images[PlayerPrefs.GetInt(texture_seleted)];
+        mani_name.SetText(all_images[PlayerPrefs.GetInt(texture_seleted)].name);
     }
 
     int test_viewer = 0;
@@ -189,6 +261,7 @@ public class mani_move : MonoBehaviour
             test_viewer = 0;
         }
         test_mani_material.mainTexture = all_images[test_viewer];
+        mani_name.SetText(all_images[test_viewer].name);
     }
 
     public void decrement_test_mani()
@@ -203,6 +276,7 @@ public class mani_move : MonoBehaviour
         }
 
         test_mani_material.mainTexture = all_images[test_viewer];
+        mani_name.SetText(all_images[test_viewer].name);
     }
 
     public void save_test_mani()

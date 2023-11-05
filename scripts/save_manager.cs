@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
 using System;
+using System.IO;
 using TMPro;
+using UnityEngine;
 
 public class save_manager : MonoBehaviour
 {
@@ -12,7 +10,6 @@ public class save_manager : MonoBehaviour
 
     string fileContents;
     public TextMeshProUGUI mala, mani;
-
 
 
     public bool empty_file = false;
@@ -24,6 +21,8 @@ public class save_manager : MonoBehaviour
 
 
     public TextMeshProUGUI month_days_count, mala_counts;
+
+    public GameObject calendar_graph;
 
     void Start()
     {
@@ -105,6 +104,10 @@ public class save_manager : MonoBehaviour
 
     void Update()
     {
+        if (calendar_graph.active)
+        {
+            plot_graph();
+        }
         
     }
 
