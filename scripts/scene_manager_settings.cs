@@ -65,8 +65,6 @@ public class scene_manager_settings : MonoBehaviour
 
     public void decrement_count()
     {
-        int tmp_mala_count;
-        int tmp_mani_count;
         mala_prev_count = Convert.ToInt32(mala_count.text);
         mani_prev_count = Convert.ToInt32(mani_count.text);
     }
