@@ -24,6 +24,7 @@ public class save_manager : MonoBehaviour
 
     public GameObject calendar_graph;
 
+
     void Start()
     {
         filePath = Application.persistentDataPath + "/mala_data.txt";
@@ -102,14 +103,15 @@ public class save_manager : MonoBehaviour
         }
     }
 
+    int tmp_i = 0;
+
     void Update()
     {
-        if (calendar_graph.active)
-        {
-            plot_graph();
-        }
-        
+       
     }
+
+
+
 
     void check_make_file()
     {
@@ -167,20 +169,25 @@ public class save_manager : MonoBehaviour
 
         float bar_width = width_parent / days_in_month;
         float bar_height = height_parent / max_count_in_month;
+
+
         for (int i = 0;i < days_in_month; i++)
         {
             bar_objects[i] = Instantiate(bar_to_get, bar_to_get.transform.parent);
             RectTransform tmp_rect_trans = bar_objects[i].GetComponent<RectTransform>();
 
-            DateTime tofind = DateTime.Parse((i+1).ToString()+ "-" + dt_graph_date.ToShortDateString().Split("-")[1]+ "-" + dt_graph_date.ToShortDateString().Split("-")[2]);
-            
-            float bar_height_child = find_height_block(tofind);
-            //Debug.Log(bar_height_child + " >> " + tofind);
+
+            float bar_height_child = find_height_block(new DateTime(dt_graph_date.Year, dt_graph_date.Month, i + 1));
+
             bar_height_child *= bar_height;
             tmp_rect_trans.sizeDelta = new Vector2(bar_width, bar_height_child);
 
+            
             // position
             tmp_rect_trans.anchoredPosition = new Vector2(bar_width/2 + (bar_width * i), bar_height_child/2);
+
+            
+
         }
 
         month_days_count.SetText(days_in_month.ToString());
@@ -211,8 +218,12 @@ public class save_manager : MonoBehaviour
     {
         for(int i = 0; i < bar_objects.Length; i++)
         {
-            Destroy(bar_objects[i]);
+            if(bar_objects[i] != null)
+                Destroy(bar_objects[i]);
         }
+
+        month_days_count.SetText("");
+        mala_counts.SetText("");
     }
 
     int extract_data_malas_max()

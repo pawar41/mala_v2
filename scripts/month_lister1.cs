@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using TMPro;
 using System;
@@ -16,12 +16,20 @@ public class month_lister1 : MonoBehaviour
 
     DateTime current_plotted;
 
+    public TextMeshProUGUI data_string;
+    string filePath;
+
     void Start()
     {
+        filePath = Application.persistentDataPath + "/mala_data.txt";
+
         calendar_date_elements = GameObject.FindGameObjectsWithTag("calendar_element_dates");
         set_ref_date();
 
         plot_calendar_dup(DateTime.Now);
+        plot_date_data(DateTime.Now);
+
+        
     }
 
     void test_numbering()
@@ -39,7 +47,35 @@ public class month_lister1 : MonoBehaviour
         ref_date = DateTime.Parse(ref_date_nr);
     }
 
-    
+    public void clicked_button()
+    {
+        GameObject atmp = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+        string rec_date = atmp.transform.GetComponentInChildren<TextMeshProUGUI>().text;
+
+        int button_text;
+        if (rec_date == null || rec_date == "" || rec_date == " " || rec_date == "  " || rec_date == "   ")
+        {
+            button_text = 0;
+        }
+        else
+        {
+            button_text = int.Parse(rec_date);
+
+            string tmpaui = button_text.ToString() + " " + month_current_display.text + " " + year_current_display.text;
+            DateTime gen_date = DateTime.Parse(tmpaui);
+
+            plot_date_data(gen_date);
+        }
+
+        
+
+        //DateTime gen_date = new DateTime(int.Parse(year_current_display.text),int.Parse(),);
+        //plot_date_data();
+
+
+        //month_current_display.text;
+        
+    }
 
     void plot_calendar(DateTime platting_month)
     {
@@ -58,7 +94,7 @@ public class month_lister1 : MonoBehaviour
        
 
         int start_block = (((int)(platting_month - ref_date).TotalDays) % 7) + 1;
-        Debug.Log("start block >> " + start_block + " || " + (((int)(platting_month - ref_date).TotalDays)) );
+        //Debug.Log("start block >> " + start_block + " || " + (((int)(platting_month - ref_date).TotalDays)) );
         empty_calendar();
 
         int block_ref_tmp = 1;
@@ -101,7 +137,6 @@ public class month_lister1 : MonoBehaviour
             return;
         }
 
-        DateTime todays_date_in = DateTime.Now;
 
         month_current_display.SetText(platting_month.ToLongDateString().Split(' ')[1]);
         year_current_display.SetText(platting_month.ToLongDateString().Split(' ')[2]);
@@ -136,8 +171,8 @@ public class month_lister1 : MonoBehaviour
                     block_ref_tmp++;
                 }
             }
+            // dt.DayOfWeek
 
-            
 
             for (int j = 0; j < ((start_block + days_in_month_ref) - calendar_date_elements.Length) - 1; j++)
             {
@@ -182,9 +217,25 @@ public class month_lister1 : MonoBehaviour
             }
         }
 
-        
-
         current_plotted = platting_month;
+    }
+
+    void plot_date_data(DateTime tmp)
+    {
+        Vector2 max_cnts = max_mala(tmp);
+        string to_write = tmp.ToLongDateString() + "\n" + tmp.DayOfWeek + "\n" + max_cnts.x + "\n" + max_cnts.y;
+        data_string.SetText(to_write);
+    }
+
+    string read_file()
+    {
+        string tmp_string;
+        using (StreamReader sr = new StreamReader(filePath))
+        {
+            tmp_string = sr.ReadToEnd();
+        }
+
+        return (tmp_string.Replace("\n", ""));
     }
 
     public void increment_month_plotting()
@@ -208,6 +259,34 @@ public class month_lister1 : MonoBehaviour
 
     void Update()
     {
-        
+        //max_mala(DateTime.Today);
     }
+
+
+    Vector2 max_mala(DateTime tmpa)
+    {
+        string[] out_tmp = read_file().Split(";");
+        Array.Resize(ref out_tmp, out_tmp.Length - 1);
+        int mala_number = 0;
+        int mani_number = 0;
+
+
+        int[] all_entries = new int[out_tmp.Length];
+
+        for (int i = 0; i < out_tmp.Length; i++)
+        {
+            DateTime entry_date = DateTime.Parse(out_tmp[i].Split(",")[1]);
+            
+            if(entry_date.Date == tmpa.Date)
+            {
+                mala_number += int.Parse(out_tmp[i].Split(",")[2]);
+                mani_number += int.Parse(out_tmp[i].Split(",")[3]);
+
+            }
+
+        }
+
+        return new Vector2(mala_number, mani_number);
+    }
+
 }
