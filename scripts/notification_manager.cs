@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Unity.Notifications.Android;
 
 public class notification_manager : MonoBehaviour
 {
@@ -47,6 +48,25 @@ public class notification_manager : MonoBehaviour
     {
         set_time_dropdown();
         set_content(0);
+
+        var channel =
+            new AndroidNotificationChannel()
+            {
+                Id = "channel_id",
+                Name = "default_channel",
+                Importance = Importance.Default,
+                Description = "channel_description"
+            };
+
+        AndroidNotificationCenter.RegisterNotificationChannel(channel);
+
+        var notification = new AndroidNotification();
+        notification.Title = "Speedy Square";
+        notification.Text = "Someone beat the highscore!";
+        notification.FireTime = System.DateTime.Now.AddSeconds(10);
+
+        AndroidNotificationCenter.SendNotification(notification, "default_channel");
+        Debug.Log("Send note");
     }
 
     void set_content(int opt_sel)
@@ -338,11 +358,11 @@ public class notification_manager : MonoBehaviour
         if (am_pm.value == 0)
         {
             Debug.Log("setting 0");
-            CreateAlarm("test", int.Parse(hours_timeoptions[hour.value]), int.Parse(minutes_timeoptions[minutes.value]));
+
         } else
         {
             Debug.Log("setting 1");
-            CreateAlarm("test", int.Parse(hours_timeoptions[hour.value]) + 12, int.Parse(minutes_timeoptions[minutes.value]));
+
         }
     }
 

@@ -1,1 +1,100 @@
-<uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="1"
+    android:versionName="0.1"
+    android:installLocation="2"
+    android:compileSdkVersion="34"
+    android:compileSdkVersionCodename="14"
+    package="com.DefaultCompany.malaversion2"
+    platformBuildVersionCode="34"
+    platformBuildVersionName="14">
+
+    <uses-sdk
+        android:minSdkVersion="22"
+        android:targetSdkVersion="34" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true" />
+
+    <uses-feature
+        android:glEsVersion="0x30000" />
+
+    <uses-feature
+        android:name="android.hardware.vulkan.version"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen.multitouch"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen.multitouch.distinct"
+        android:required="false" />
+
+    <application
+        android:label="@ref/0x7f040005"
+        android:icon="@ref/0x7f030000"
+        android:extractNativeLibs="true">
+
+        <meta-data
+            android:name="unity.splash-mode"
+            android:value="0" />
+
+        <meta-data
+            android:name="unity.splash-enable"
+            android:value="true" />
+
+        <meta-data
+            android:name="unity.launch-fullscreen"
+            android:value="true" />
+
+        <meta-data
+            android:name="unity.allow-resizable-window"
+            android:value="false" />
+
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+
+        <meta-data
+            android:name="unity.auto-report-fully-drawn"
+            android:value="true" />
+
+        <activity
+            android:theme="@ref/0x7f050001"
+            android:name="com.unity3d.player.UnityPlayerActivity"
+            android:exported="true"
+            android:launchMode="2"
+            android:screenOrientation="13"
+            android:configChanges="0x40003fff"
+            android:hardwareAccelerated="false"
+            android:resizeableActivity="false">
+
+            <intent-filter>
+
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+
+                <action
+                    android:name="android.intent.action.MAIN" />
+            </intent-filter>
+
+            <meta-data
+                android:name="unityplayer.UnityActivity"
+                android:value="true" />
+
+            <meta-data
+                android:name="notch_support"
+                android:value="true" />
+        </activity>
+    </application>
+</manifest>

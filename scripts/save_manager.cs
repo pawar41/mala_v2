@@ -44,8 +44,11 @@ public class save_manager : MonoBehaviour
 
         // convert from string to Datetime
         //var parsedDate = DateTime.Parse(DateTime.Now.ToString());
+    }
 
-
+    public void delete_file()
+    {
+        reset_file();
     }
 
     public void save_calendar_count()
@@ -137,7 +140,7 @@ public class save_manager : MonoBehaviour
     public void resettted_count_warning()
     {
         warning_text.SetText("All count resseted to 0");
-        warning_caption.SetText("Mala count = 0 & mani count = 0");
+        warning_caption.SetText("\n\nMala count = 0 & mani count = 0\n\n");
     }
 
     public void entry_saved_warning()
@@ -192,6 +195,12 @@ public class save_manager : MonoBehaviour
 
         month_days_count.SetText(days_in_month.ToString());
         mala_counts.SetText(max_count_in_month.ToString());
+    }
+
+    public void reset_all()
+    {
+        Debug.Log("deleted " + Time.fixedTime);
+        PlayerPrefs.DeleteAll();
     }
 
     int find_height_block(DateTime date_needed)

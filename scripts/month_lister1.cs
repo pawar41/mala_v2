@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class month_lister1 : MonoBehaviour
 {
@@ -47,10 +48,31 @@ public class month_lister1 : MonoBehaviour
         ref_date = DateTime.Parse(ref_date_nr);
     }
 
+    Image old_image = null;
+    TextMeshProUGUI old_tmp= null;
+
     public void clicked_button()
     {
+        Image bgma = null;
         GameObject atmp = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-        string rec_date = atmp.transform.GetComponentInChildren<TextMeshProUGUI>().text;
+        TextMeshProUGUI rec_date_tmp = atmp.transform.GetComponentInChildren<TextMeshProUGUI>();
+        string rec_date = rec_date_tmp.text;
+
+
+
+        if (atmp.transform.GetChild(0).name == "Image")
+        {
+            bgma = atmp.transform.GetChild(0).GetComponentInChildren<Image>();
+        }
+        else
+        {
+             bgma = atmp.transform.GetChild(1).GetComponentInChildren<Image>();
+        }
+        
+        ColorUtility.TryParseHtmlString("#0E8BAD", out Color default_bg_color);
+        ColorUtility.TryParseHtmlString("#F6F1F1", out Color shift_bg_color);
+
+        ColorUtility.TryParseHtmlString("#146C94", out Color text_colour);
 
         int button_text;
         if (rec_date == null || rec_date == "" || rec_date == " " || rec_date == "  " || rec_date == "   ")
@@ -63,18 +85,30 @@ public class month_lister1 : MonoBehaviour
 
             string tmpaui = button_text.ToString() + " " + month_current_display.text + " " + year_current_display.text;
             DateTime gen_date = DateTime.Parse(tmpaui);
-
             plot_date_data(gen_date);
+
+
+            if (bgma != null)
+            {
+                bgma.color = shift_bg_color;
+            }
+
+
+            if(old_image != null)
+            {
+                old_image.color = default_bg_color;
+            }
+
+            if(old_tmp != null)
+            {
+                old_tmp.color = shift_bg_color;
+            }
+
+            old_image = bgma;
+            old_tmp = rec_date_tmp;
+            rec_date_tmp.color = text_colour;
         }
 
-        
-
-        //DateTime gen_date = new DateTime(int.Parse(year_current_display.text),int.Parse(),);
-        //plot_date_data();
-
-
-        //month_current_display.text;
-        
     }
 
     void plot_calendar(DateTime platting_month)
@@ -262,6 +296,11 @@ public class month_lister1 : MonoBehaviour
         //max_mala(DateTime.Today);
     }
 
+
+    public void reset_all_imgs()
+    {
+
+    }
 
     Vector2 max_mala(DateTime tmpa)
     {

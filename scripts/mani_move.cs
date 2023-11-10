@@ -91,6 +91,12 @@ public class mani_move : MonoBehaviour
         sounds_work.clip = clips_to_use[sound_nos];
     }
 
+    public void reset_sound()
+    {
+        sound_nos = 0;
+        sounds_work.clip = clips_to_use[0];
+    }
+
     public void inc_sound()
     {
         if(sound_nos < clips_to_use.Length -1)
@@ -285,5 +291,12 @@ public class mani_move : MonoBehaviour
         current_material.mainTexture = all_images[test_viewer];
     }
 
-    
+    public void reset_test_mani()
+    {
+        //PlayerPrefs.SetInt(texture_seleted, test_viewer);
+        test_viewer = 0;
+        current_material.mainTexture = all_images[0];
+    }
+
+
 }

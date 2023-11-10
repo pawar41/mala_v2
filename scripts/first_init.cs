@@ -84,13 +84,22 @@ public class first_init : MonoBehaviour
 */
     }
 
+    public void launch_donate_site()
+    {
+        Application.OpenURL("https://pawar41.github.io/pawar41/");
+    }
+
     void Update()
     {
 
     }
 
+    private void Awake()
+    {
+        select_language();
+    }
 
-    
+
     public void select_language()
     {
         if(tmp_dropdown == null)

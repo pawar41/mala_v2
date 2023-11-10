@@ -14,11 +14,11 @@ public class scene_manager_settings : MonoBehaviour
     public TextMeshProUGUI mani_count;
     public TextMeshProUGUI mala_count;
 
-    public GameObject settings, menues;
+    public GameObject /* settings */ menues;
 
     void Start()
     {
-        settings.SetActive(false);
+        //settings.SetActive(false);
         menues.SetActive(false);
 
     }
