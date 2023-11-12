@@ -10,4 +10,8 @@ public class launch_dev : MonoBehaviour
     {
         Application.OpenURL(site_url);
     }
+    private void Start()
+    {
+        
+    }
 }

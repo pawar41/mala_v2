@@ -6,15 +6,18 @@ public class first_init : MonoBehaviour
 {
     private static readonly string initial_start_prefs = "initial_start_prefs";
     private static readonly string language_prefs = "language_prefs";
-    private static readonly string texture_seleted = "texture_seleted";
+    private static readonly string language_prefs_int = "language_prefs_int";
 
+
+    private static readonly string texture_seleted = "texture_seleted";
+    
 
 
 
     bool is_initial_user = false;
 
-    List<string> m_DropOptions_languages = new List<string> { "English", "हिंदी", "mandarine chinese", "Spanish" , "Arabic" , "English", "French", "Portugese", "Russian", "Japanese", "German", "chinese", "mandarine chinese", "italian" , "Turkish" };
-    List<string> english_tans = new List<string> { "English", "Hindi", "mandarine chinese", "Spanish", "Arabic", "English", "French", "Portugese", "Russian", "Japanese", "German", "chinese", "mandarine chinese", "italian", "Turkish" };
+    List<string> m_DropOptions_languages = new List<string> { "English", "日本語", "中国人", "हिंदी", "русский", "한국인", "Deutsch", "Español", "Português", "bahasa Indonesia" };
+    List<string> english_tans = new List<string> { "English", "Japanese", "Chinese", "Hindi", "Russian", "Korean", "German", "Spanish", "Portuguese", "Indonesian" };
 
     public TMP_Dropdown tmp_dropdown;
 
@@ -37,12 +40,17 @@ public class first_init : MonoBehaviour
     public bool clear_prefs = false;
     //delete after release
 
+    public GameObject user_guide;
+    bool next_ug_active = false;
+
     void Start()
     {
+
         if (PlayerPrefs.GetInt(initial_start_prefs) != -1 && !is_initial_user)
         {
             PlayerPrefs.SetInt(initial_start_prefs, -1);
             PlayerPrefs.SetString(language_prefs, m_DropOptions_languages[0]);
+            PlayerPrefs.SetInt(language_prefs_int, 0);
 
             tmp_dropdown.onValueChanged.AddListener(delegate {
                 set_language();
@@ -59,6 +67,7 @@ public class first_init : MonoBehaviour
         if (is_initial_user)
         {
             select_language();
+            next_ug_active = true;
             is_initial_user = false;
         }
 
@@ -66,6 +75,7 @@ public class first_init : MonoBehaviour
         if(PlayerPrefs.GetString(language_prefs) == "" || PlayerPrefs.GetString(language_prefs) == " " || PlayerPrefs.GetString(language_prefs) == null)
         {
             PlayerPrefs.SetString(language_prefs, m_DropOptions_languages[0]);
+            PlayerPrefs.SetInt(language_prefs_int, 0);
         }
 
 
@@ -116,11 +126,17 @@ public class first_init : MonoBehaviour
 
     public void set_language(){;
         PlayerPrefs.SetString(language_prefs, english_tans[tmp_dropdown.value]);
+        PlayerPrefs.SetInt(language_prefs_int, tmp_dropdown.value);
     }
 
     public void next_button()
     {
-        PlayerPrefs.SetString(language_prefs, selected_lang_tmp);
+        set_language();
+        if (user_guide != null && next_ug_active)
+        {
+            user_guide.SetActive(true);
+            next_ug_active = false;
+        }
     }
 
     string selected_lang_tmp = "";

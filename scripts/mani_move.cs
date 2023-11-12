@@ -50,10 +50,13 @@ public class mani_move : MonoBehaviour
     public TextMeshProUGUI audio_name;
     public TextMeshProUGUI mani_name;
 
+    Vector3 start_y_pos;
+    public GameObject image_loading;
 
     void Start()
     {
-        
+        image_loading.SetActive(true);
+        start_y_pos = selectorArr[0].transform.position;
 
         sound_nos = PlayerPrefs.GetInt(sound_selected);
 
@@ -62,7 +65,7 @@ public class mani_move : MonoBehaviour
 
         audio_name.SetText(clips_to_use[sound_nos].name);
 
-        floatArray = new float[selectorArr.Length];
+        
 
         if (PlayerPrefs.GetInt(mala_prefs) == 0 && PlayerPrefs.GetInt(mani_prefs) == 0)
         {
@@ -75,14 +78,25 @@ public class mani_move : MonoBehaviour
             mala_count.SetText(PlayerPrefs.GetInt(mala_prefs).ToString());
         }
 
-        reset_position();
-        tmp_position_of_mani = transform.position;
+        
 
         //gameObject.
         //ahi.mainTexture = tex;
 
         current_material.mainTexture = all_images[PlayerPrefs.GetInt(texture_seleted)];
-        
+
+        reset_data();
+
+    }
+
+    void reset_data()
+    {
+        floatArray = new float[selectorArr.Length];
+
+        reset_position();
+        tmp_position_of_mani = transform.position;
+
+
     }
 
     public void save_sound()
@@ -144,15 +158,25 @@ public class mani_move : MonoBehaviour
         test_viewer = PlayerPrefs.GetInt(texture_seleted);
     }
 
+    bool flush_movement = false;
+
     void Update()
     {
         if (move_mani)
         {
             for (int i = selectorArr.Length -1; i >= 0; i--)
             {
-                tmp_position_of_mani.y = Mathf.Lerp(floatArray[i], floatArray[i] - drop_number, (Time.fixedTime - start_time)/duration_time);
-                selectorArr[i].transform.position = tmp_position_of_mani;
+                if (flush_movement)
+                {
+                    tmp_position_of_mani.y = Mathf.Lerp(floatArray[i], floatArray[i] - drop_number,1f);
+                    flush_movement = false;
+                }
+                else
+                {
+                    tmp_position_of_mani.y = Mathf.Lerp(floatArray[i], floatArray[i] - drop_number, (Time.fixedTime - start_time) / duration_time);
+                }
 
+                selectorArr[i].transform.position = tmp_position_of_mani;
                 
                 if (selectorArr[0].transform.position.y <= floatArray[i] - drop_number)
                 {
@@ -186,13 +210,19 @@ public class mani_move : MonoBehaviour
         int current_mani_count = Convert.ToInt32(mani_count.text);
         int current_mala_count = Convert.ToInt32(mala_count.text);
 
-        if (current_mani_count < 107)
+        if (move_mani)
+        {
+            flush_movement = true;
+            reset_position();
+        }
+
+        if (current_mani_count < 108)
         {
             current_mani_count++;
             mani_count.SetText(current_mani_count.ToString());
         } else
         {
-            mani_count.SetText("0");
+            mani_count.SetText("1");
 
             current_mala_count++;
             mala_count.SetText(current_mala_count.ToString());
@@ -213,6 +243,19 @@ public class mani_move : MonoBehaviour
             tmp_position_of.y -=  drop_number;
             selectorArr[i].transform.position = tmp_position_of;
         }
+    }
+
+    void flush_pos()
+    {
+
+        for (int i = 0; i < selectorArr.Length; i++)
+        {
+            start_y_pos.y -= drop_number * i;
+
+            selectorArr[i].transform.position = start_y_pos;
+        }
+
+        reset_data();
     }
 
     void update_position_data()
